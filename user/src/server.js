@@ -45,6 +45,12 @@ mongoose.connect(config.MONGODB_URI)
 connectRedis();
 
 // Routes
+
+
+app.get('/', (req, res) => {
+  res.send('Hi! Welcome to SuperU API');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/workspace', workspaceRoutes);

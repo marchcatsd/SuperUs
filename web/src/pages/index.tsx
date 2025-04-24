@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 const Home = () => {
   const router = useRouter();
 
+  // Automatically redirect to login page when the component mounts
+  useEffect(() => {
+    router.push('/login');
+  }, [router]);
+
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Head>

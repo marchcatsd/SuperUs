@@ -135,7 +135,3 @@ npm run dev
 - `GET /api/workspace/:workspaceId`: Get workspace by ID
 - `PUT /api/workspace/:workspaceId/content/:contentId`: Update content
 - `POST /api/workspace/:workspaceId/content`: Add new content
-
-## License
-
-MIT
