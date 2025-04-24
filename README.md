@@ -1,84 +1,141 @@
-# Turborepo starter
+# SuperU - Collaborative Content Management System
 
-This Turborepo starter is maintained by the Turborepo core team.
+SuperU is a collaborative content management system that allows teams to scrape website content, organize it in a structured format, and collaboratively edit it in real-time.
 
-## Using this example
+## Features
 
-Run the following command:
+- **Authentication**: Secure email authentication with JWT
+- **Team Collaboration**: Invite team members to collaborate on content
+- **Website Scraping**: Scrape content from any website and organize it in a structured format
+- **Real-time Editing**: Collaborate on content in real-time with team members
+- **File Tree Visualization**: View content in a recursive file tree structure
+- **Auto-save**: Changes are automatically saved to the backend
 
-```sh
-npx create-turbo@latest
+## Tech Stack
+
+### Backend
+- Node.js with Express
+- MongoDB for database
+- Redis for caching and session management
+- Socket.io for real-time collaboration
+- JWT for authentication
+
+### Frontend
+- Next.js (Pages Router) version 14.1.0
+- TypeScript
+- Tiptap for rich text editing
+- Socket.io client for real-time collaboration
+
+### DevOps
+- Docker for containerization
+- Docker Compose for orchestration
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Docker and Docker Compose
+- MongoDB (or use the Docker Compose setup)
+- Redis (or use the Docker Compose setup)
+
+### Running with Docker
+
+1. Clone the repository
+2. Navigate to the project directory
+3. Run Docker Compose:
+
+```bash
+docker-compose up -d
 ```
 
-## What's inside?
+This will start all services:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8000
+- MongoDB: mongodb://localhost:27017
+- Redis: redis://localhost:6379
 
-This Turborepo includes the following packages/apps:
+### Running Locally (Development)
 
-### Apps and Packages
+#### Backend
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+1. Navigate to the `user` directory
+2. Install dependencies:
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```bash
+npm install
 ```
 
-### Develop
+3. Start the development server:
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
+```bash
+npm run dev
 ```
 
-### Remote Caching
+#### Frontend
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+1. Navigate to the `web` directory
+2. Install dependencies:
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+npm install
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+3. Start the development server:
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+```bash
+npm run dev
 ```
 
-## Useful Links
+## Project Structure
 
-Learn more about the power of Turborepo:
+```
+├── user/                  # Backend code
+│   ├── src/
+│   │   ├── config/        # Configuration files
+│   │   ├── controllers/   # Route controllers
+│   │   ├── middleware/    # Middleware functions
+│   │   ├── models/        # Database models
+│   │   ├── routes/        # API routes
+│   │   ├── utils/         # Utility functions
+│   │   └── server.js      # Server entry point
+│   ├── .env               # Environment variables
+│   ├── Dockerfile         # Backend Docker configuration
+│   └── package.json       # Backend dependencies
+│
+├── web/                   # Frontend code
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── contexts/      # React contexts
+│   │   ├── pages/         # Next.js pages
+│   │   └── styles/        # CSS styles
+│   ├── Dockerfile         # Frontend Docker configuration
+│   └── package.json       # Frontend dependencies
+│
+└── docker-compose.yml     # Docker Compose configuration
+```
 
-- [Tasks](https://turbo.build/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/docs/reference/command-line-reference)
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/signup`: Register a new user
+- `POST /api/auth/login`: Login a user
+- `GET /api/auth/me`: Get current user
+
+### Teams
+- `POST /api/team`: Create a new team
+- `GET /api/team`: Get all teams for a user
+- `GET /api/team/:teamId`: Get team by ID
+- `POST /api/team/:teamId/invite`: Invite a member to a team
+- `POST /api/team/:teamId/accept`: Accept team invitation
+
+### Workspaces
+- `POST /api/workspace`: Create a new workspace
+- `GET /api/workspace/team/:teamId`: Get all workspaces for a team
+- `GET /api/workspace/:workspaceId`: Get workspace by ID
+- `PUT /api/workspace/:workspaceId/content/:contentId`: Update content
+- `POST /api/workspace/:workspaceId/content`: Add new content
+
+## License
+
+MIT

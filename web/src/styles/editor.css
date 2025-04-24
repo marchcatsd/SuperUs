@@ -1,0 +1,114 @@
+/* Only show placeholder when editor is completely empty */
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #616161;
+  content: "Start writing...";
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  font-weight: normal;
+}
+
+.ProseMirror {
+  padding: 0.5rem;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  color: white;
+}
+
+/* Focus styles */
+.ProseMirror:focus {
+  outline: none;
+}
+
+/* Headings */
+.ProseMirror h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Paragraph spacing */
+.ProseMirror p {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Lists */
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.25rem;
+}
+
+.ProseMirror li p {
+  margin: 0;
+}
+
+/* Code blocks */
+.ProseMirror pre {
+  background-color: #1e1e1e;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  overflow-x: auto;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror code {
+  background-color: #1e1e1e;
+  border-radius: 0.25rem;
+  padding: 0.2rem 0.4rem;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+/* Blockquotes */
+.ProseMirror blockquote {
+  border-left: 3px solid #333333;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+}
+
+/* Links */
+.ProseMirror a {
+  color: #a855f7;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.ProseMirror a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Selection */
+.ProseMirror ::selection {
+  background-color: rgba(168, 85, 247, 0.2);
+}
