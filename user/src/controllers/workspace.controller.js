@@ -567,8 +567,8 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
         });
       }
       
-      // Process unique links (limit to 10 per page to avoid overwhelming)
-      const uniqueLinks = [...new Set(navLinks)].slice(0, 10);
+      // Process unique links (limit to 50 per page to get more comprehensive documentation)
+      const uniqueLinks = [...new Set(navLinks)].slice(0, 50);
       
       // Recursively scrape linked pages
       for (const link of uniqueLinks) {
