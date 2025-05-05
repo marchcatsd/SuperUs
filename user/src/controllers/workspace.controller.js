@@ -270,7 +270,8 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
         }] 
       },
       url: normalizedUrl,
-      children: []
+      children: [],
+      type: 'document'
     };
     
     contents.push(mainContent);
@@ -305,7 +306,7 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
       // Process navigation items with better structure matching
       const processNavItems = () => {
         // Look for main section headers
-        navElement.find('h2, h3, .section-title, [role="heading"], .heading').each((_, heading) => {
+        navElement.find('h2, h3, .section-title, [role="heading"], .heading, strong, b, .nav-heading').each((_, heading) => {
           const sectionTitle = $(heading).text().trim();
           if (!sectionTitle || processedTitles.has(sectionTitle)) return;
           
@@ -315,7 +316,9 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
             id: sectionId,
             title: sectionTitle,
             children: [],
-            parentId: null
+            parentId: null,
+            type: 'section',
+            path: sectionId
           };
           
           // Find items that belong to this section
@@ -367,7 +370,9 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
                     title: childText,
                     url: childFullUrl,
                     parentId: itemId,
-                    children: []
+                    children: [],
+                    type: 'document',
+                    path: childId
                   });
                 });
               }
@@ -377,7 +382,9 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
                 title: linkText,
                 url: fullUrl,
                 parentId: sectionId,
-                children: childItems
+                children: childItems,
+                type: childItems.length > 0 ? 'section' : 'document',
+                path: itemId
               });
             });
             
@@ -404,7 +411,9 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
               id: sectionId,
               title: sectionTitle,
               children: [],
-              parentId: null
+              parentId: null,
+              type: 'section',
+              path: sectionId
             };
             
             // Find child items
@@ -431,7 +440,9 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
                 title: linkText,
                 url: fullUrl,
                 parentId: sectionId,
-                children: []
+                children: [],
+                type: 'document',
+                path: itemId
               });
             });
             
@@ -460,14 +471,14 @@ const scrapeWebsite = async (url, maxDepth = 2, currentDepth = 0, visitedUrls = 
         const tagName = $(element).prop('tagName').toLowerCase();
         
         if (tagName === 'h1') {
-          currentH1 = { id, title: text, children: [] };
+          currentH1 = { id, title: text, children: [], type: 'section', path: id };
           currentH2 = null;
           headingTree.push(currentH1);
         } else if (tagName === 'h2' && currentH1) {
-          currentH2 = { id, title: text, parentId: currentH1.id, children: [] };
+          currentH2 = { id, title: text, parentId: currentH1.id, children: [], type: 'section', path: id };
           currentH1.children.push(currentH2);
         } else if (tagName === 'h3' && currentH2) {
-          currentH2.children.push({ id, title: text, parentId: currentH2.id, children: [] });
+          currentH2.children.push({ id, title: text, parentId: currentH2.id, children: [], type: 'document', path: id });
         }
       });
       
