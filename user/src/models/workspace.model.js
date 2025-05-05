@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const contentSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: true,
@@ -10,14 +14,17 @@ const contentSchema = new mongoose.Schema({
     type: Object, // Tiptap stores content as JSON
     required: true
   },
-  path: {
+  url: {
     type: String,
-    required: true
+    trim: true
   },
-  parentPath: {
+  parentId: {
     type: String,
-    default: ''
+    default: null
   },
+  children: [{
+    type: String
+  }],
   lastEditedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -27,6 +34,30 @@ const contentSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+const navigationItemSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  url: {
+    type: String,
+    trim: true
+  },
+  parentId: {
+    type: String,
+    default: null
+  },
+  children: {
+    type: Array,
+    default: []
+  }
+}, { _id: false });
 
 const workspaceSchema = new mongoose.Schema({
   name: {
@@ -45,6 +76,7 @@ const workspaceSchema = new mongoose.Schema({
     required: true
   },
   contents: [contentSchema],
+  navigationTree: [navigationItemSchema],
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
