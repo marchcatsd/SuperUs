@@ -18,7 +18,9 @@
   },
   "packageManager": "bun@1.1.39",
   "workspaces": [
-    "apps/*",
+    "user",
+    "web",
+    "tailwind-setup",
     "packages/*"
   ]
 }
